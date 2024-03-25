@@ -3,10 +3,9 @@ package test.demo3.userManagement.dao;
 
 import test.demo3.userManagement.model.User;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 // this DAO provide all CRUD operations of USERS
 public class UserDAO {
@@ -34,7 +33,7 @@ public class UserDAO {
             PreparedStatement prepareStatement = conn.prepareStatement(INSERT_USER);
             prepareStatement.setString(1 , user.getName());
             prepareStatement.setString(2 , user.getEmail());
-            prepareStatement.setString(3 , user.getCountry);
+            prepareStatement.setString(3 , user.getCountry());
             prepareStatement.executeUpdate();
         }catch(Exception e){
             e.printStackTrace();
@@ -42,16 +41,70 @@ public class UserDAO {
     }
     // update USER
     public int updateUser (User user){
+        int row = 0 ;
         try ( Connection conn = getConnection()){
             PreparedStatement prepareStatement = conn.prepareStatement(UPDATE_USERS_ID);
             prepareStatement.setString(1 , user.getName());
             prepareStatement.setString(2 , user.getEmail());
             prepareStatement.setString(3 , user.getCountry());
-            prepareStatement.setString(4 , user.getId());
-            return  prepareStatement.executeUpdate() ;
+            prepareStatement.setInt(4 , user.getId());
+             row =  prepareStatement.executeUpdate() ;
         }catch(Exception e){
             e.printStackTrace();
         }
+        return row ;
+    }
+
+    public User getUserById(int userId) {
+        User user = null;
+        try (Connection connection = getConnection()){
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID);
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String country = resultSet.getString("country");
+                user = new User(id, name, email, country);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return user;
+    }
+
+    public List<User> getAllUsers() {
+        List<User> userList = new ArrayList<>();
+        try (Connection connection = getConnection()){
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                User user = null ;
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String country = resultSet.getString("country");
+                user = new User(id, name, email, country);
+                userList.add(user);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return userList;
+    }
+
+    public boolean deleteUserById(int userId) {
+        boolean deleted = false;
+        try (Connection connection = getConnection()){
+             PreparedStatement preparedStatement = connection.prepareStatement(DELET_USER_ID);
+            preparedStatement.setInt(1, userId);
+            int rowsAffected = preparedStatement.executeUpdate();
+            deleted = rowsAffected > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return deleted;
     }
 
 }
