@@ -1,7 +1,7 @@
-package test.demo3.userManagement.dao;
+package test.demo3.userManagement.DAO;
 
 
-import test.demo3.userManagement.model.User;
+import test.demo3.userManagement.MODEL.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,9 +9,9 @@ import java.util.List;
 
 // this DAO provide all CRUD operations of USERS
 public class UserDAO {
-    private String jdbcURL = "jdbc:mysql://hostname:3306/demo?useSSL=false"; // Your JDBC URL
+    private String jdbcURL = "jdbc:mysql://hostname:3307/demo?useSSL=false"; // Your JDBC URL
     private String jdbcUsername = "root"; // Your database username
-    private String jdbcPassword = "password"; // Your database password
+    private String jdbcPassword = ""; // Your database password
 
 
     // SQL query
@@ -28,33 +28,36 @@ public class UserDAO {
 
 
     // create USER
-    public void insertUser(User user){
+    public boolean insertUser(User user){
+        boolean test=false;
         try ( Connection conn = getConnection()){
             PreparedStatement prepareStatement = conn.prepareStatement(INSERT_USER);
             prepareStatement.setString(1 , user.getName());
             prepareStatement.setString(2 , user.getEmail());
             prepareStatement.setString(3 , user.getCountry());
-            prepareStatement.executeUpdate();
+          test =  prepareStatement.executeUpdate() > 0;
         }catch(Exception e){
             e.printStackTrace();
         }
+        return test;
     }
     // update USER
-    public int updateUser (User user){
-        int row = 0 ;
+    public boolean updateUser (User user){
+        boolean row = false ;
         try ( Connection conn = getConnection()){
             PreparedStatement prepareStatement = conn.prepareStatement(UPDATE_USERS_ID);
             prepareStatement.setString(1 , user.getName());
             prepareStatement.setString(2 , user.getEmail());
             prepareStatement.setString(3 , user.getCountry());
             prepareStatement.setInt(4 , user.getId());
-             row =  prepareStatement.executeUpdate() ;
+             row =  prepareStatement.executeUpdate() > 0 ;
         }catch(Exception e){
             e.printStackTrace();
         }
         return row ;
     }
 
+    // get user by id
     public User getUserById(int userId) {
         User user = null;
         try (Connection connection = getConnection()){
@@ -74,6 +77,7 @@ public class UserDAO {
         return user;
     }
 
+    // get ALL users
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
         try (Connection connection = getConnection()){
@@ -94,6 +98,8 @@ public class UserDAO {
         return userList;
     }
 
+
+    // delete user by id
     public boolean deleteUserById(int userId) {
         boolean deleted = false;
         try (Connection connection = getConnection()){

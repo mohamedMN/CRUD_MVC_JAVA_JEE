@@ -1,4 +1,4 @@
-package test.demo3.userManagement.model;
+package test.demo3.userManagement.MODEL;
 
 public class User {
     private int id;
