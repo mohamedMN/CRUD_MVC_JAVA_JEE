@@ -27,23 +27,27 @@ public class UserServlet extends HttpServlet {
         String action = request.getServletPath();
         if (action != null) {
             switch (action) {
-                case "new":
+                case "/new":
                     // Call method to insert new user
                     ShowNewForm(request, response);
                     break;
-                case "update":
+                case "/update":
                     // Call method to update user
                     updateUser(request, response);
                     break;
-                case "delete":
+                case "/delete":
                     // Call method to delete user
                     deleteUser(request, response);
                     break;
-                case "insert":
+                case "/insert":
                     // Call method to get user by ID
                     insertUser(request, response);
                     break;
-                case "edit":
+                case "/list":
+                    // Call method to get user by ID
+                    listAllUsers(request, response);
+                    break;
+                case "/edit":
                     // Call method to get all users
                     try {
                         showEditForm(request, response);

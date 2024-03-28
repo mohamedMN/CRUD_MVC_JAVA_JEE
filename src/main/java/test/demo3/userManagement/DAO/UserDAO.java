@@ -9,9 +9,9 @@ import java.util.List;
 
 // this DAO provide all CRUD operations of USERS
 public class UserDAO {
-    private String jdbcURL = "jdbc:mysql://hostname:3307/demo?useSSL=false"; // Your JDBC URL
-    private String jdbcUsername = "root"; // Your database username
-    private String jdbcPassword = ""; // Your database password
+    private String jdbcURL = "jdbc:mysql://hostname:3307/demo?useSSL=false"; //  JDBC URL
+    private String jdbcUsername = "root"; //  database username
+    private String jdbcPassword = ""; //  database password
 
 
     // SQL query
