@@ -9,11 +9,31 @@ import java.util.List;
 
 // this DAO provide all CRUD operations of USERS
 public class UserDAO {
-    private String jdbcURL = "jdbc:mysql://hostname:3307/demo?useSSL=false"; //  JDBC URL
+    private String jdbcURL = "jdbc:mysql://localhost:3306/demo"; //  JDBC URL
     private String jdbcUsername = "root"; //  database username
     private String jdbcPassword = ""; //  database password
 
+    public UserDAO() {}
 
+    // Method to establish a database connection
+    private Connection getConnection() throws SQLException {
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+        } catch (ClassNotFoundException e) {
+            // Handle ClassNotFoundException
+            e.printStackTrace();
+            throw new SQLException("Database driver not found.");
+        } catch (SQLException e) {
+            // Handle SQLException
+            e.printStackTrace();
+            throw new SQLException("Error connecting to the database.");
+        }
+        return connection;
+    }
+    
+    
     // SQL query
     private static final String INSERT_USER = "INSERT INTO users "+"(name , email , country ) VALUES" +"(?,?,?);";
     private static final String SELECT_USER_BY_ID = "SELECT * FROM users WHERE id=? ;";
@@ -21,10 +41,7 @@ public class UserDAO {
     private static final String DELET_USER_ID = "DELETE from suers where id = ? ;";
     private static final String UPDATE_USERS_ID = "UPDATE users set name = ? , email = ? , country = ?  WHERE id = ? ;";
 
-    // Method to establish a database connection
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-    }
+   
 
 
     // create USER

@@ -24,13 +24,12 @@
     <div class="card">
         <div class="card-body">
             <c:if test="${user != null}">
-            <form action="update" method="post">
-                </c:if>
-                <c:if test="${user == null}">
+            	<form action="insert" method="post">
+            </c:if>
+                	<c:if test="${user == null}">
                 <form action="insert" method="post">
                     </c:if>
 
-                    <caption>
                         <h2>
                             <c:if test="${user != null}">
                                 Edit User
@@ -39,7 +38,6 @@
                                 Add New User
                             </c:if>
                         </h2>
-                    </caption>
 
                     <c:if test="${user != null}">
                         <input type="hidden" name="id" value="<c:out value='${user.id}' />" />
@@ -59,6 +57,7 @@
 
                     <button type="submit" class="btn btn-success">Save</button>
                 </form>
+                
         </div>
     </div>
 </div>
