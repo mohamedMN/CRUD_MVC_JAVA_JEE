@@ -1,11 +1,15 @@
 package test.demo3.userManagement.DAO;
 
 
-import test.demo3.userManagement.MODEL.User;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import test.demo3.userManagement.MODEL.User;
 
 // this DAO provide all CRUD operations of USERS
 public class UserDAO {
@@ -47,8 +51,8 @@ public class UserDAO {
     // create USER
     public boolean insertUser(User user){
         boolean test=false;
-        try ( Connection conn = getConnection()){
-            PreparedStatement prepareStatement = conn.prepareStatement(INSERT_USER);
+        try ( Connection conn = getConnection();
+            PreparedStatement prepareStatement = conn.prepareStatement(INSERT_USER);){
             prepareStatement.setString(1 , user.getName());
             prepareStatement.setString(2 , user.getEmail());
             prepareStatement.setString(3 , user.getCountry());
@@ -61,8 +65,8 @@ public class UserDAO {
     // update USER
     public boolean updateUser (User user){
         boolean row = false ;
-        try ( Connection conn = getConnection()){
-            PreparedStatement prepareStatement = conn.prepareStatement(UPDATE_USERS_ID);
+        try ( Connection conn = getConnection();
+            PreparedStatement prepareStatement = conn.prepareStatement(UPDATE_USERS_ID);){
             prepareStatement.setString(1 , user.getName());
             prepareStatement.setString(2 , user.getEmail());
             prepareStatement.setString(3 , user.getCountry());
@@ -77,10 +81,11 @@ public class UserDAO {
     // get user by id
     public User getUserById(int userId) {
         User user = null;
-        try (Connection connection = getConnection()){
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID);
+        try (Connection connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID);){
             preparedStatement.setInt(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
+        	try(
+            ResultSet resultSet = preparedStatement.executeQuery()){
             if (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
@@ -97,16 +102,15 @@ public class UserDAO {
     // get ALL users
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        try (Connection connection = getConnection()){
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery()	){
             while (resultSet.next()) {
-                User user = null ;
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
                 String country = resultSet.getString("country");
-                user = new User(id, name, email, country);
+                User user = new User(id, name, email, country);
                 userList.add(user);
             }
         } catch (SQLException ex) {
@@ -119,8 +123,8 @@ public class UserDAO {
     // delete user by id
     public boolean deleteUserById(int userId) {
         boolean deleted = false;
-        try (Connection connection = getConnection()){
-             PreparedStatement preparedStatement = connection.prepareStatement(DELET_USER_ID);
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELET_USER_ID);){
             preparedStatement.setInt(1, userId);
             int rowsAffected = preparedStatement.executeUpdate();
             deleted = rowsAffected > 0;

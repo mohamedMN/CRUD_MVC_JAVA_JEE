@@ -150,7 +150,20 @@ public class UserServlet extends HttpServlet {
     private void listAllUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UserDAO userDAO = new UserDAO();
         List<User> userList = userDAO.getAllUsers();
-        request.setAttribute("userList", userList);
+        if (userList != null && !userList.isEmpty()) {
+            // Data is present in the servlet
+            // You can further process or display the data
+            // For example, you can iterate over the userList and print user details
+            for (User user : userList) {
+                System.out.println(user.toString());
+                // Print other user details as needed
+            }
+        } else {
+            // Data is not present in the servlet
+            // You may want to handle this scenario, such as displaying a message
+            System.out.println("No user data found.");
+        }
+        request.setAttribute("listUser", userList);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user-list.jsp");
         dispatcher.forward(request, response);
     }

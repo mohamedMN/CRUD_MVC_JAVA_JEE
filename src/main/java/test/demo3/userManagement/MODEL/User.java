@@ -21,7 +21,12 @@ public class User {
 
 
 
-    public int getId() {
+    @Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", email=" + email + ", country=" + country + "]";
+	}
+
+	public int getId() {
         return id;
     }
 
