@@ -42,7 +42,7 @@ public class UserDAO {
     private static final String INSERT_USER = "INSERT INTO users "+"(name , email , country ) VALUES" +"(?,?,?);";
     private static final String SELECT_USER_BY_ID = "SELECT * FROM users WHERE id=? ;";
     private static final String SELECT_ALL_USERS = "SELECT * FROM users ;";
-    private static final String DELET_USER_ID = "DELETE from suers where id = ? ;";
+    private static final String DELET_USER_ID = "DELETE from users where id = ? ;";
     private static final String UPDATE_USERS_ID = "UPDATE users set name = ? , email = ? , country = ?  WHERE id = ? ;";
 
    
@@ -93,7 +93,8 @@ public class UserDAO {
                 String country = resultSet.getString("country");
                 user = new User(id, name, email, country);
             }
-        } catch (SQLException ex) {
+        	}
+        	} catch (SQLException ex) {
             ex.printStackTrace();
         }
         return user;

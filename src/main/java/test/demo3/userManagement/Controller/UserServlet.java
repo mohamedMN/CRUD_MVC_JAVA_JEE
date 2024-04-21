@@ -115,14 +115,15 @@ public class UserServlet extends HttpServlet {
         request.setAttribute("user", user);
 
         // Forward the request to the JSP page for editing
-        RequestDispatcher dispatcher = request.getRequestDispatcher("user-flow.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("user-form.jsp");
         dispatcher.forward(request, response);
     }
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Get the user ID parameter from the request
         int userId = Integer.parseInt(request.getParameter("id"));
-
+        
+        System.out.println("update userId :"+userId);
         // Call the getUserById method from the DAO to fetch the existing user details
         UserDAO userDAO = new UserDAO(); // Initialize your UserDAO object
         User existingUser = userDAO.getUserById(userId);

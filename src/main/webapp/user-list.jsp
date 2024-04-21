@@ -61,8 +61,12 @@
                     <td>
                         <c:out value="${user.country}" />
                     </td>
-                    <td><a href="edit?id=<c:out value='${user.id}' />">Edit</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="delete?id=<c:out value='${user.id}' />">Delete</a></td>
-                </tr>
+                    <td>
+	                    <a href="edit?id=${user.id}">Edit</a> 
+	                    &nbsp;&nbsp;&nbsp;&nbsp; 
+	                    <a href="delete?id=${user.id}">Delete</a>
+                    </td>
+                </tr>	
             </c:forEach>
             </tbody>
 
